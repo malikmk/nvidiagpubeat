@@ -1,6 +1,3 @@
-# Important Note
-This doesn't work yet.
-
 # Nvidiagpubeat
 
 Welcome to Nvidiagpubeat.

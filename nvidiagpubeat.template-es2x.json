@@ -44,40 +44,36 @@
             }
           }
         },
-        "gpu": {
-          "properties": {
-            "bar1_free_mb": {
-              "type": "float"
-            },
-            "bar1_total_mb": {
-              "type": "float"
-            },
-            "bar1_used_mb": {
-              "type": "float"
-            },
-            "frame_buffer_free_mb": {
-              "type": "float"
-            },
-            "frame_buffer_total_mb": {
-              "type": "float"
-            },
-            "frame_buffer_used_mb": {
-              "type": "float"
-            },
-            "id": {
-              "index": "analyzed",
-              "norms": {
-                "enabled": false
-              },
-              "type": "string"
-            },
-            "memory_utilization_pct": {
-              "type": "float"
-            },
-            "processor_utilization_pct": {
-              "type": "float"
-            }
-          }
+        "gpu_bar1_free_mb": {
+          "type": "float"
+        },
+        "gpu_bar1_total_mb": {
+          "type": "float"
+        },
+        "gpu_bar1_used_mb": {
+          "type": "float"
+        },
+        "gpu_frame_buffer_free_mb": {
+          "type": "float"
+        },
+        "gpu_frame_buffer_total_mb": {
+          "type": "float"
+        },
+        "gpu_frame_buffer_used_mb": {
+          "type": "float"
+        },
+        "gpu_id": {
+          "index": "analyzed",
+          "norms": {
+            "enabled": false
+          },
+          "type": "string"
+        },
+        "gpu_memory_utilization_pct": {
+          "type": "float"
+        },
+        "gpu_processor_utilization_pct": {
+          "type": "float"
         },
         "tags": {
           "ignore_above": 1024,

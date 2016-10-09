@@ -76,7 +76,7 @@ None
 
 
 [float]
-=== gpu.id
+=== gpu_id
 
 type: text
 
@@ -85,7 +85,7 @@ required: True
 Identifier for the GPU
 
 [float]
-=== gpu.frame_buffer_total_mb
+=== gpu_frame_buffer_total_mb
 
 type: float
 
@@ -94,7 +94,7 @@ required: True
 Total frame buffer memory for the GPU
 
 [float]
-=== gpu.frame_buffer_used_mb
+=== gpu_frame_buffer_used_mb
 
 type: float
 
@@ -103,7 +103,7 @@ required: True
 Used frame buffer memory for the GPU
 
 [float]
-=== gpu.frame_buffer_free_mb
+=== gpu_frame_buffer_free_mb
 
 type: float
 
@@ -112,7 +112,7 @@ required: True
 Free frame buffer memory for the GPU
 
 [float]
-=== gpu.bar1_total_mb
+=== gpu_bar1_total_mb
 
 type: float
 
@@ -121,7 +121,7 @@ required: True
 Total BAR1 memory for the GPU
 
 [float]
-=== gpu.bar1_used_mb
+=== gpu_bar1_used_mb
 
 type: float
 
@@ -130,7 +130,7 @@ required: True
 Used BAR1 memory for the GPU
 
 [float]
-=== gpu.bar1_free_mb
+=== gpu_bar1_free_mb
 
 type: float
 
@@ -139,7 +139,7 @@ required: True
 Free BAR1 memory for the GPU
 
 [float]
-=== gpu.processor_utilization_pct
+=== gpu_processor_utilization_pct
 
 type: float
 
@@ -148,7 +148,7 @@ required: True
 Utilization measurement for the GPU
 
 [float]
-=== gpu.memory_utilization_pct
+=== gpu_memory_utilization_pct
 
 type: float
 

@@ -95,15 +95,15 @@ func RunNvidiaSmi(b *beat.Beat) ([]common.MapStr) {
 		event := common.MapStr {
 			"@timestamp": common.Time(time.Now()),
 			"type": b.Name,
-			"gpu.id": gpu_info.Id,
-			"gpu.frame_buffer_total_mb": fb_total,
-			"gpu.frame_buffer_free_mb": fb_free,
-			"gpu.frame_buffer_used_mb": fb_used,
-			"gpu.bar1_total_mb": b_total,
-			"gpu.bar1_free_mb": b_free,
-			"gpu.bar1_used_mb": b_used,
-			"gpu.processsor_utilization_pct": gpu_utilization,
-			"gpu.memory_utilization_pct": memory_utilization,
+			"gpu_id": gpu_info.Id,
+			"gpu_frame_buffer_total_mb": fb_total,
+			"gpu_frame_buffer_free_mb": fb_free,
+			"gpu_frame_buffer_used_mb": fb_used,
+			"gpu_bar1_total_mb": b_total,
+			"gpu_bar1_free_mb": b_free,
+			"gpu_bar1_used_mb": b_used,
+			"gpu_processsor_utilization_pct": gpu_utilization,
+			"gpu_memory_utilization_pct": memory_utilization,
 		}
 		events = append(events, event)
 	}
