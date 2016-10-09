@@ -1,0 +1,40 @@
+- key: nvidiagpubeat
+  title: nvidiagpubeat
+  description:
+  fields:
+    - name: gpu.id
+      type: text
+      required: true
+      description: Identifier for the GPU
+    - name: gpu.frame_buffer_total_mb
+      type: float
+      required: true
+      description: Total frame buffer memory for the GPU
+    - name: gpu.frame_buffer_used_mb
+      type: float
+      required: true
+      description: Used frame buffer memory for the GPU
+    - name: gpu.frame_buffer_free_mb
+      type: float
+      required: true
+      description: Free frame buffer memory for the GPU
+    - name: gpu.bar1_total_mb
+      type: float
+      required: true
+      description: Total BAR1 memory for the GPU
+    - name: gpu.bar1_used_mb
+      type: float
+      required: true
+      description: Used BAR1 memory for the GPU
+    - name: gpu.bar1_free_mb
+      type: float
+      required: true
+      description: Free BAR1 memory for the GPU
+    - name: gpu.processor_utilization_pct
+      type: float
+      required: true
+      description: Utilization measurement for the GPU
+    - name: gpu.memory_utilization_pct
+      type: float
+      required: true
+      description: Memory utilization measurement for the GPU

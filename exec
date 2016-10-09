@@ -1,0 +1,194 @@
+package beater
+
+import (
+	"bytes"
+	"fmt"
+	"time"
+	"encoding/xml"
+	"strings"
+	"strconv"
+
+	"os/exec"
+
+	"github.com/elastic/beats/libbeat/beat"
+	"github.com/elastic/beats/libbeat/common"
+	"github.com/elastic/beats/libbeat/logp"
+	"github.com/elastic/beats/libbeat/publisher"
+
+	"github.com/zen-chetan/nvidiagpubeat/config"
+)
+
+type NvidiaSmiOutput struct {
+	Timestamp string `xml:"timestamp"`
+	DriverVersion string `xml:"driver_version"`
+	AttachedGPUs int `xml:"attached_gpus"`
+	GPUs []GPUInfo `xml:"gpu"`
+}
+
+type GPUInfo struct {
+	Id string `xml:"id,attr"`
+	FrameBufferTotalMemory string `xml:"fb_memory_usage>total"`
+	FrameBufferFreeMemory string `xml:"fb_memory_usage>free"`
+	FrameBufferUsedMemory string `xml:"fb_memory_usage>used"`
+	Bar1TotalMemory string `xml:"bar1_memory_usage>total"`
+	Bar1FreeMemory string `xml:"bar1_memory_usage>free"`
+	Bar1UsedMemory string `xml:"bar1_memory_usage>used"`
+	GPUUtilization string `xml:"utilization>gpu_util"`
+	MemoryUtilization string `xml:"utilization>memory_util"`
+	Processes []ProcessInfo `xml:"processes>process_info"`
+}
+
+type ProcessInfo struct {
+	PID int `xml:"pid"`
+	ProcessName string `xml:"process_name"`
+	UsedMemory string `xml:"used_memory"`
+}
+
+type GPUMetric struct {
+	GPUId string
+	Metric string
+	Measurement float64
+	Units string
+}
+
+type ProcessMetric struct {
+	GPUId string
+	ProcessId int
+	Process string
+	MemoryUsed float64
+	MemoryUnits string
+}
+
+type Nvidiagpubeat struct {
+	done   chan struct{}
+	config config.Config
+	client publisher.Client
+}
+
+// Creates beater
+func New(b *beat.Beat, cfg *common.Config) (beat.Beater, error) {
+	config := config.DefaultConfig
+	if err := cfg.Unpack(&config); err != nil {
+		return nil, fmt.Errorf("Error reading config file: %v", err)
+	}
+
+	bt := &Nvidiagpubeat{
+		done: make(chan struct{}),
+		config: config,
+	}
+	return bt, nil
+}
+
+func Split(text string) (float64, string) {
+	parts := strings.SplitN(text, " ", 2)
+	value, _ := strconv.ParseFloat(parts[0], 64)
+	units := parts[1]
+	return value, units
+}
+
+func GetProcessDetails(pid int) string {
+	out, _ := exec.Command("ps", "-p", string(pid), "-o", "args", "--no-header").Output()
+	return string(out)
+}
+
+func RunNvidiaSmi() ([]GPUMetric, []ProcessMetric) {
+	cmd := exec.Command("nvidia-smi", "-q", "-x")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+	if err != nil {
+		logp.Err("Failed to run nvidia-smi!")
+		return nil, nil
+	}
+
+	var v NvidiaSmiOutput
+	err2 := xml.Unmarshal(out.Bytes(), &v)
+	if err2 != nil {
+		logp.Err("Failed to bind to output of nvidia-smi!")
+		return nil, nil
+	}
+
+	var gpu_metrics []GPUMetric
+	var process_metrics []ProcessMetric
+
+	for _, gpu_info := range v.GPUs {
+		fb_total, fb_units := Split(gpu_info.FrameBufferTotalMemory)
+		fb_free, _ := Split(gpu_info.FrameBufferFreeMemory)
+		fb_used, _ := Split(gpu_info.FrameBufferUsedMemory)
+		gpu_metrics = append(gpu_metrics, GPUMetric{GPUId: gpu_info.Id, Metric: "Total Frame Buffer Memory", Measurement: fb_total, Units: fb_units})
+		gpu_metrics = append(gpu_metrics, GPUMetric{GPUId: gpu_info.Id, Metric: "Free Frame Buffer Memory", Measurement: fb_free, Units: fb_units})
+		gpu_metrics = append(gpu_metrics, GPUMetric{GPUId: gpu_info.Id, Metric: "Used Frame Buffer Memory", Measurement: fb_used, Units: fb_units})
+
+		b_total, b_units := Split(gpu_info.Bar1TotalMemory)
+		b_free, _ := Split(gpu_info.Bar1FreeMemory)
+		b_used, _ := Split(gpu_info.Bar1UsedMemory)
+		gpu_metrics = append(gpu_metrics, GPUMetric{GPUId: gpu_info.Id, Metric: "Total Bar1 Memory", Measurement: b_total, Units: b_units})
+		gpu_metrics = append(gpu_metrics, GPUMetric{GPUId: gpu_info.Id, Metric: "Free Bar1 Memory", Measurement: b_free, Units: b_units})
+		gpu_metrics = append(gpu_metrics, GPUMetric{GPUId: gpu_info.Id, Metric: "Used Bar1 Memory", Measurement: b_used, Units: b_units})
+
+		gpu_utilization, _ := Split(gpu_info.GPUUtilization)
+		memory_utilization, _ := Split(gpu_info.MemoryUtilization)
+		gpu_metrics = append(gpu_metrics, GPUMetric{GPUId: gpu_info.Id, Metric: "GPU Utilization", Measurement: gpu_utilization, Units: "%"})
+		gpu_metrics = append(gpu_metrics, GPUMetric{GPUId: gpu_info.Id, Metric: "Memory Utilization", Measurement: memory_utilization, Units: "%"})
+
+		for _, process_info := range gpu_info.Processes {
+			details := GetProcessDetails(process_info.PID)
+			mem_used, mem_units := Split(process_info.UsedMemory)
+			process_metrics = append(process_metrics, ProcessMetric{GPUId: gpu_info.Id, ProcessId: process_info.PID, Process: details, MemoryUsed: mem_used, MemoryUnits: mem_units})
+		}
+	}
+
+	return gpu_metrics, process_metrics
+}
+
+func GetHostname() string {
+	env_hostname := os.Getenv("DOCKER_HOSTNAME")
+	if len(env_hostname) > 0 {
+		return env_hostname
+	}
+	return os.Hostname()
+}
+
+func (bt *Nvidiagpubeat) Run(b *beat.Beat) error {
+	logp.Info("nvidiagpubeat is running! Hit CTRL-C to stop it.")
+
+	bt.client = b.Publisher.Connect()
+	ticker := time.NewTicker(bt.config.Period)
+	hostname := GetHostname()
+
+	for {
+		select {
+		case <-bt.done:
+			return nil
+		case <-ticker.C:
+		}
+
+		foundation := common.MapStr{
+			"@timestamp": common.Time(time.Now()),
+			"type": b.Name,
+			"hostnaem": hostname,
+		}
+
+		gpu_metrics, process_metrics := RunNvidiaSmi()
+
+		for _, gpu_metric := range gpu_metrics {
+			metric_map := structs.Map(gpu_metric)
+			event := common.MapStrUnion(foundation, metric_map)
+			bt.client.PublishEvent(event)
+		}
+
+		for _, process_metric := range process_metrics {
+			process_map = structs.Map(process_metric)
+			event := common.MapStrUnion(foundation, process_map)
+			bt.client.PublishEvent(event)
+		}
+
+		bt.client.PublishEvent(event)
+		logp.Info("Event sent")
+	}
+}
+
+func (bt *Nvidiagpubeat) Stop() {
+	bt.client.Close()
+	close(bt.done)
+}

@@ -1,0 +1,11 @@
+2016-10-09T16:00:14Z INFO Setup Beat: nvidiagpubeat; Version: 6.0.0-alpha1
+2016-10-09T16:00:14Z INFO Max Retries set to: 3
+2016-10-09T16:00:14Z INFO Activated logstash as output plugin.
+2016-10-09T16:00:14Z INFO Publisher name: ip-172-31-42-229
+2016-10-09T16:00:14Z INFO Flush Interval set to: 1s
+2016-10-09T16:00:14Z INFO Max Bulk Size set to: 2048
+2016-10-09T16:00:14Z INFO nvidiagpubeat start running.
+2016-10-09T16:00:14Z INFO nvidiagpubeat is running! Hit CTRL-C to stop it.
+2016-10-09T16:00:18Z INFO Total non-zero values: 
+2016-10-09T16:00:18Z INFO Uptime: 4.525314161s
+2016-10-09T16:00:18Z INFO nvidiagpubeat stopped.

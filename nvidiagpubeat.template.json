@@ -1,0 +1,85 @@
+{
+  "mappings": {
+    "_default_": {
+      "_all": {
+        "norms": false
+      },
+      "_meta": {
+        "version": "6.0.0-alpha1"
+      },
+      "dynamic_templates": [
+        {
+          "strings_as_keyword": {
+            "mapping": {
+              "ignore_above": 1024,
+              "type": "keyword"
+            },
+            "match_mapping_type": "string"
+          }
+        }
+      ],
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "beat": {
+          "properties": {
+            "hostname": {
+              "ignore_above": 1024,
+              "type": "keyword"
+            },
+            "name": {
+              "ignore_above": 1024,
+              "type": "keyword"
+            },
+            "version": {
+              "ignore_above": 1024,
+              "type": "keyword"
+            }
+          }
+        },
+        "gpu": {
+          "properties": {
+            "bar1_free_mb": {
+              "type": "float"
+            },
+            "bar1_total_mb": {
+              "type": "float"
+            },
+            "bar1_used_mb": {
+              "type": "float"
+            },
+            "frame_buffer_free_mb": {
+              "type": "float"
+            },
+            "frame_buffer_total_mb": {
+              "type": "float"
+            },
+            "frame_buffer_used_mb": {
+              "type": "float"
+            },
+            "id": {
+              "norms": false,
+              "type": "text"
+            },
+            "memory_utilization_pct": {
+              "type": "float"
+            },
+            "processor_utilization_pct": {
+              "type": "float"
+            }
+          }
+        },
+        "tags": {
+          "ignore_above": 1024,
+          "type": "keyword"
+        }
+      }
+    }
+  },
+  "order": 0,
+  "settings": {
+    "index.refresh_interval": "5s"
+  },
+  "template": "nvidiagpubeat-*"
+}
