@@ -13,7 +13,6 @@ This document describes the fields that are exported by Nvidiagpubeat. They are
 grouped in the following categories:
 
 * <<exported-fields-beat>>
-* <<exported-fields-nvidiagpubeat>>
 
 --
 [[exported-fields-beat]]
@@ -68,91 +67,4 @@ type: dict
 
 Contains user configurable fields.
 
-
-[[exported-fields-nvidiagpubeat]]
-== nvidiagpubeat Fields
-
-None
-
-
-[float]
-=== gpu_id
-
-type: text
-
-required: True
-
-Identifier for the GPU
-
-[float]
-=== gpu_frame_buffer_total_mb
-
-type: float
-
-required: True
-
-Total frame buffer memory for the GPU
-
-[float]
-=== gpu_frame_buffer_used_mb
-
-type: float
-
-required: True
-
-Used frame buffer memory for the GPU
-
-[float]
-=== gpu_frame_buffer_free_mb
-
-type: float
-
-required: True
-
-Free frame buffer memory for the GPU
-
-[float]
-=== gpu_bar1_total_mb
-
-type: float
-
-required: True
-
-Total BAR1 memory for the GPU
-
-[float]
-=== gpu_bar1_used_mb
-
-type: float
-
-required: True
-
-Used BAR1 memory for the GPU
-
-[float]
-=== gpu_bar1_free_mb
-
-type: float
-
-required: True
-
-Free BAR1 memory for the GPU
-
-[float]
-=== gpu_processor_utilization_pct
-
-type: float
-
-required: True
-
-Utilization measurement for the GPU
-
-[float]
-=== gpu_memory_utilization_pct
-
-type: float
-
-required: True
-
-Memory utilization measurement for the GPU
 

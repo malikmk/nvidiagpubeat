@@ -1,11 +1,55 @@
-2016-10-09T16:00:14Z INFO Setup Beat: nvidiagpubeat; Version: 6.0.0-alpha1
-2016-10-09T16:00:14Z INFO Max Retries set to: 3
-2016-10-09T16:00:14Z INFO Activated logstash as output plugin.
-2016-10-09T16:00:14Z INFO Publisher name: ip-172-31-42-229
-2016-10-09T16:00:14Z INFO Flush Interval set to: 1s
-2016-10-09T16:00:14Z INFO Max Bulk Size set to: 2048
-2016-10-09T16:00:14Z INFO nvidiagpubeat start running.
-2016-10-09T16:00:14Z INFO nvidiagpubeat is running! Hit CTRL-C to stop it.
-2016-10-09T16:00:18Z INFO Total non-zero values: 
-2016-10-09T16:00:18Z INFO Uptime: 4.525314161s
-2016-10-09T16:00:18Z INFO nvidiagpubeat stopped.
+2016-10-11T00:16:52Z INFO Metrics logging every 30s
+2016-10-11T00:16:52Z INFO Home path: [/home/ubuntu/gowork/src/github.com/zen-chetan/nvidiagpubeat] Config path: [/home/ubuntu/gowork/src/github.com/zen-chetan/nvidiagpubeat] Data path: [/home/ubuntu/gowork/src/github.com/zen-chetan/nvidiagpubeat/data] Logs path: [/home/ubuntu/gowork/src/github.com/zen-chetan/nvidiagpubeat/logs]
+2016-10-11T00:16:52Z INFO Setup Beat: nvidiagpubeat; Version: 6.0.0-alpha1
+2016-10-11T00:16:52Z DBG  Processors: 
+2016-10-11T00:16:52Z DBG  Initializing output plugins
+2016-10-11T00:16:52Z INFO Loading template enabled. Reading template file: /home/ubuntu/gowork/src/github.com/zen-chetan/nvidiagpubeat/nvidiagpubeat.template.json
+2016-10-11T00:16:52Z INFO Loading template enabled for Elasticsearch 2.x. Reading template file: /home/ubuntu/gowork/src/github.com/zen-chetan/nvidiagpubeat/nvidiagpubeat.template-es2x.json
+2016-10-11T00:16:52Z INFO Elasticsearch url: http://localhost:9200
+2016-10-11T00:16:52Z INFO Activated elasticsearch as output plugin.
+2016-10-11T00:16:52Z DBG  Create output worker
+2016-10-11T00:16:52Z DBG  No output is defined to store the topology. The server fields might not be filled.
+2016-10-11T00:16:52Z INFO Publisher name: ip-172-31-42-229
+2016-10-11T00:16:52Z INFO Flush Interval set to: 1s
+2016-10-11T00:16:52Z INFO Max Bulk Size set to: 50
+2016-10-11T00:16:52Z DBG  create bulk processing worker (interval=1s, bulk size=50)
+2016-10-11T00:16:52Z INFO nvidiagpubeat start running.
+2016-10-11T00:16:52Z INFO nvidiagpubeat is running! Hit CTRL-C to stop it.
+2016-10-11T00:17:22Z INFO No non-zero metrics in the last 30s
+2016-10-11T00:17:22Z DBG  Publish: {
+  "@timestamp": "2016-10-11T00:17:22.516Z",
+  "beat": {
+    "hostname": "ip-172-31-42-229",
+    "name": "ip-172-31-42-229",
+    "version": "6.0.0-alpha1"
+  },
+  "gpu": {
+    "bar1_free_mb": 126.000000,
+    "bar1_total_mb": 128.000000,
+    "bar1_used_mb": 2.000000,
+    "frame_buffer_free_mb": 4036.000000,
+    "frame_buffer_total_mb": 4036.000000,
+    "frame_buffer_used_mb": 0.000000,
+    "id": "0000:00:03.0",
+    "memory_utilization_pct": 0.000000,
+    "process_count": 0,
+    "processsor_utilization_pct": 0.000000
+  },
+  "type": "gpu"
+}
+2016-10-11T00:17:22Z INFO GPU metric event sent
+2016-10-11T00:17:23Z DBG  output worker: publish 1 events
+2016-10-11T00:17:23Z DBG  ES Ping(url=http://localhost:9200, timeout=1m30s)
+2016-10-11T00:17:23Z DBG  Ping status code: 200
+2016-10-11T00:17:23Z INFO Connected to Elasticsearch version 2.4.1
+2016-10-11T00:17:23Z INFO Trying to load template for client: http://localhost:9200
+2016-10-11T00:17:23Z DBG  HEAD http://localhost:9200/_template/nvidiagpubeat  <nil>
+2016-10-11T00:17:23Z INFO Detected Elasticsearch 2.x. Automatically selecting the 2.x version of the template
+2016-10-11T00:17:23Z DBG  PUT http://localhost:9200/_template/nvidiagpubeat  map[order:0 settings:map[index.refresh_interval:5s] template:nvidiagpubeat-* mappings:map[_default_:map[dynamic_templates:[map[strings_as_keyword:map[mapping:map[ignore_above:1024 index:not_analyzed type:string] match_mapping_type:string]]] properties:map[@timestamp:map[type:date] beat:map[properties:map[hostname:map[index:not_analyzed type:string ignore_above:1024] name:map[type:string ignore_above:1024 index:not_analyzed] version:map[ignore_above:1024 index:not_analyzed type:string]]] tags:map[ignore_above:1024 index:not_analyzed type:string]] _all:map[norms:map[enabled:false]] _meta:map[version:6.0.0-alpha1]]]]
+2016-10-11T00:17:23Z INFO Elasticsearch template with name 'nvidiagpubeat' loaded
+2016-10-11T00:17:23Z DBG  PublishEvents: 1 events have been  published to elasticsearch in 125.253656ms.
+2016-10-11T00:17:23Z DBG  send completed
+2016-10-11T00:17:35Z DBG  Received sigterm/sigint, stopping
+2016-10-11T00:17:35Z INFO Total non-zero values:  libbeat.es.published_and_acked_events=1 libbeat.es.call_count.PublishEvents=1 libbeat.es.publish.read_bytes=928 libbeat.es.publish.write_bytes=1831 libbeat.publisher.published_events=1 libbeat.publisher.messages_in_worker_queues=1
+2016-10-11T00:17:35Z INFO Uptime: 42.67275254s
+2016-10-11T00:17:35Z INFO nvidiagpubeat stopped.

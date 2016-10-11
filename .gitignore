@@ -1,5 +1,7 @@
 /.idea
 /build
+/logs
+/data
 
 .DS_Store
 /nvidiagpubeat

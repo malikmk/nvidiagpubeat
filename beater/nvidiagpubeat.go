@@ -35,6 +35,13 @@ type GPUInfo struct {
 	Bar1UsedMemory string `xml:"bar1_memory_usage>used"`
 	GPUUtilization string `xml:"utilization>gpu_util"`
 	MemoryUtilization string `xml:"utilization>memory_util"`
+	Processes []ProcessInfo `xml:"processes>process_info"`
+}
+
+type ProcessInfo struct {
+	Pid string `xml:"pid"`
+	Process string `xml:"process_name"`
+	UsedMemory string `xml:"used_memory"`
 }
 
 type Nvidiagpubeat struct {
@@ -94,18 +101,36 @@ func RunNvidiaSmi(b *beat.Beat) ([]common.MapStr) {
 		memory_utilization, _ := Split(gpu_info.MemoryUtilization)
 		event := common.MapStr {
 			"@timestamp": common.Time(time.Now()),
-			"type": b.Name,
-			"gpu_id": gpu_info.Id,
-			"gpu_frame_buffer_total_mb": fb_total,
-			"gpu_frame_buffer_free_mb": fb_free,
-			"gpu_frame_buffer_used_mb": fb_used,
-			"gpu_bar1_total_mb": b_total,
-			"gpu_bar1_free_mb": b_free,
-			"gpu_bar1_used_mb": b_used,
-			"gpu_processsor_utilization_pct": gpu_utilization,
-			"gpu_memory_utilization_pct": memory_utilization,
+			"type": "gpu",
+			"gpu": common.MapStr {
+				"id": gpu_info.Id,
+				"frame_buffer_total_mb": fb_total,
+				"frame_buffer_free_mb": fb_free,
+				"frame_buffer_used_mb": fb_used,
+				"bar1_total_mb": b_total,
+				"bar1_free_mb": b_free,
+				"bar1_used_mb": b_used,
+				"processsor_utilization_pct": gpu_utilization,
+				"memory_utilization_pct": memory_utilization,
+				"process_count": len(gpu_info.Processes),
+			},
 		}
 		events = append(events, event)
+
+		for _, process_info := range gpu_info.Processes {
+			used_memory, _ := Split(process_info.UsedMemory)
+			pevent := common.MapStr {
+				"@timestamp": common.Time(time.Now()),
+				"type": "gpu_process",
+				"gpu_process": common.MapStr {
+					"gpu_id": gpu_info.Id,
+					"process_id": process_info.Pid,
+					"process": process_info.Process,
+					"memory_used_mb": used_memory,
+				},
+			}
+			events = append(events, pevent)
+		}
 	}
 
 	return events
