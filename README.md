@@ -3,7 +3,7 @@
 Welcome to Nvidiagpubeat.
 
 Ensure that this folder is at the following location:
-`${GOPATH}/github.com/zen-chetan`
+`${GOPATH}/github.com/BonsaiAI`
 
 ## Getting Started with Nvidiagpubeat
 
@@ -24,7 +24,7 @@ It will create a clean git history for each major step. Note that you can always
 To push Nvidiagpubeat in the git repository, run the following commands:
 
 ```
-git remote set-url origin https://github.com/zen-chetan/nvidiagpubeat
+git remote set-url origin https://github.com/BonsaiAI/nvidiagpubeat
 git push origin master
 ```
 
@@ -99,9 +99,9 @@ make clean
 To clone Nvidiagpubeat from the git repository, run the following commands:
 
 ```
-mkdir -p ${GOPATH}/github.com/zen-chetan
-cd ${GOPATH}/github.com/zen-chetan
-git clone https://github.com/zen-chetan/nvidiagpubeat
+mkdir -p ${GOPATH}/github.com/BonsaiAI
+cd ${GOPATH}/github.com/BonsaiAI
+git clone https://github.com/BonsaiAI/nvidiagpubeat
 ```
 
 
