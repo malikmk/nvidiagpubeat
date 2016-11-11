@@ -2,10 +2,8 @@ package main
 
 import (
 	"os"
-
 	"github.com/elastic/beats/libbeat/beat"
-
-	"github.com/zen-chetan/nvidiagpubeat/beater"
+	"github.com/BonsaiAI/nvidiagpubeat/beater"
 )
 
 func main() {
